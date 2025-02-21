@@ -23,16 +23,19 @@ void ADFSpeaker::dump_config() {
 
 void ADFSpeaker::start() { pipeline.start(); }
 
-void ADFSpeaker::start_() {
-   pipeline.start();
-}
-
 void ADFSpeaker::stop() {
   if (this->state_ == speaker::STATE_STOPPED)
     return;
   this->state_ = speaker::STATE_STOPPING;
   pipeline.stop();
 }
+
+void ADFSpeaker::finish() {
+  if (this->state_ == speaker::STATE_STOPPED)
+    return;
+  this->state_ = speaker::STATE_STOPPING;
+}
+
 
 void ADFSpeaker::on_pipeline_state_change(PipelineState state) {
    switch (state) {
@@ -60,6 +63,9 @@ void ADFSpeaker::on_pipeline_state_change(PipelineState state) {
 }
 
 void ADFSpeaker::loop() {
+  if ((this->state_ == speaker::STATE_STOPPING) && !this->has_buffered_data() ) {
+      pipeline.stop();
+  }
   this->pipeline.loop();
 }
 
@@ -87,6 +93,10 @@ size_t ADFSpeaker::play(const uint8_t *data, size_t length) {
 
 bool ADFSpeaker::has_buffered_data() const {
   return pcm_stream_.has_buffered_data();
+}
+
+bool ADFSpeaker::available_space() const {
+  return pcm_stream_.available_space();
 }
 
 void ADFSpeaker::request_pipeline_settings_(){

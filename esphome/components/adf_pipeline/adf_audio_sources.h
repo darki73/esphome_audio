@@ -11,22 +11,16 @@
 namespace esphome {
 namespace esp_adf {
 
-enum class ADFCodec : uint8_t {AUTO = 0, AAC, AMR, FLAC, MP3, OGG, OPUS, WAV};
+enum class ADFCodec : uint8_t { AUTO = 0, AAC, AMR, FLAC, MP3, OGG, OPUS, WAV };
 
 class Track {
-public:
+ public:
   Track() = default;
-  Track(ADFCodec codec, int rate, int bits, int channels) :
-    codec(codec),
-    sampling_rate(rate),
-    bit_depth(bits),
-    channels(channels) {}
+  Track(ADFCodec codec, int rate, int bits, int channels)
+      : codec(codec), sampling_rate(rate), bit_depth(bits), channels(channels) {}
 
-  Track( int rate, int bits, int channels) :
-    codec(ADFCodec::MP3),
-    sampling_rate(rate),
-    bit_depth(bits),
-    channels(channels) {}
+  Track(int rate, int bits, int channels)
+      : codec(ADFCodec::MP3), sampling_rate(rate), bit_depth(bits), channels(channels) {}
 
   std::string uri{""};
   optional<ADFCodec> codec;
@@ -34,17 +28,15 @@ public:
   optional<int> bit_depth;
   optional<int> channels;
 
-  Track set_uri(std::string uri){ this->uri = uri; return *this; }
+  Track set_uri(std::string uri) {
+    this->uri = uri;
+    return *this;
+  }
 
-  bool all_set(){ return (
-       codec.has_value()
-    && sampling_rate.has_value()
-    && bit_depth.has_value()
-    && channels.has_value()
-    );
+  bool all_set() {
+    return (codec.has_value() && sampling_rate.has_value() && bit_depth.has_value() && channels.has_value());
   }
 };
-
 
 class ADFPipelineSourceElement : public ADFPipelineElement {
  public:
@@ -53,15 +45,15 @@ class ADFPipelineSourceElement : public ADFPipelineElement {
 
 class HTTPStreamReaderAndDecoder : public ADFPipelineSourceElement {
  public:
-  void set_stream_uri(const std::string&  new_url);
+  void set_stream_uri(const std::string &new_url);
   const std::string get_name() override { return "HTTPStreamReader"; }
 
   bool prepare_elements(bool initial_call) override;
   bool pause_elements(bool initial_call) override;
 
-  void set_track(Track track){ this->track_ = track; }
+  void set_track(Track track) { this->track_ = track; }
 
-  void set_fixed_settings(bool value){ this->fixed_settings_ = value; }
+  void set_fixed_settings(bool value) { this->fixed_settings_ = value; }
 
  protected:
   bool init_adf_elements_() override;
@@ -82,12 +74,12 @@ class HTTPStreamReaderAndDecoder : public ADFPipelineSourceElement {
   audio_element_handle_t decoder_{};
 };
 
-
 class PCMSource : public ADFPipelineSourceElement {
  public:
   const std::string get_name() override { return "PCMSource"; }
   int stream_write(char *buffer, int len);
   bool has_buffered_data() const;
+  size_t available_space() conat;
   bool elements_have_stopped() override { return true; }
 
  protected:

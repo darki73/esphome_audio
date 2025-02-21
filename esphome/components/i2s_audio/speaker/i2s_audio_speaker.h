@@ -19,11 +19,8 @@ namespace i2s_audio {
 static const size_t BUFFER_SIZE = 1024;
 
 enum class TaskEventType : uint8_t {
-  STARTING = 0,
-  STARTED,
   PLAYING,
-  STOPPING,
-  STOPPED,
+  PAUSING,
   WARNING = 255,
 };
 
@@ -52,19 +49,36 @@ class I2SAudioSpeaker : public Component, public speaker::Speaker, public I2SWri
 
   void start() override;
   void stop() override;
+  void finish() override;
+  void flush() override;
 
   size_t play(const uint8_t *data, size_t length) override;
 
   bool has_buffered_data() const override;
+  size_t available_space() const override;
 
  protected:
   void start_();
-  void watch_();
+  void stop_();
+  uint8_t sample_size_() {
+    uint8_t size = 0;
+    switch (this->bits_per_sample_) {
+      case i2s_bits_per_sample_t.I2S_BITS_PER_SAMPLE_8BIT, size = 1; break;
+          case i2s_bits_per_sample_t.I2S_BITS_PER_SAMPLE_16BIT, size = 2; break;
+          case i2s_bits_per_sample_t.I2S_BITS_PER_SAMPLE_16BIT, size = 3; break; default:
+        size = 4;
+    }
+    if (this->channel_fmt_ == i2s_channel_fmt_t.I2S_CHANNEL_FMT_RIGHT_LEFT) {
+      size *= 2;
+    }
+
+    return size;
+  }
 
   static void player_task(void *params);
 
   TaskHandle_t player_task_handle_{nullptr};
-  QueueHandle_t buffer_queue_;
+  StreamBufferHandle_t buffer_queue_{nullptr};
   QueueHandle_t event_queue_;
 
   bool task_created_{false};

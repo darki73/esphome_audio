@@ -20,25 +20,26 @@ static const size_t BUFFER_SIZE = 1024;
 class ADFSpeaker : public speaker::Speaker, public ADFPipelineController {
  public:
   // Pipeline implementations
-  void append_own_elements(){ add_element_to_pipeline( (ADFPipelineElement*) &(this->pcm_stream_) ); }
-  const std::string get_name() {return "ADF-Speaker";}
+  void append_own_elements() { this->add_element_to_pipeline((ADFPipelineElement *) &(this->pcm_stream_)); }
+  const std::string get_name() { return "ADF-Speaker"; }
 
   // ESPHome-Component implementations
   float get_setup_priority() const override { return esphome::setup_priority::LATE; }
-  void  setup() override;
-  void  dump_config() override;
-  void  loop() override;
-
+  void setup() override;
+  void dump_config() override;
+  void loop() override;
 
   // Speaker implemenations
   void start() override;
   void stop() override;
+  void finish() override;
+
   size_t play(const uint8_t *data, size_t length) override;
+
   bool has_buffered_data() const override;
+  size_t available_space() const override;
 
  protected:
-  void start_();
-  void watch_();
 
   // Pipeline implementations
   void on_pipeline_state_change(PipelineState state) override;

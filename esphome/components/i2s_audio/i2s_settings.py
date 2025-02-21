@@ -32,6 +32,7 @@ CHANNEL_FORMAT = {
     "right": i2s_channel_fmt_t.I2S_CHANNEL_FMT_ONLY_RIGHT,
     # Separated left and right channel
     "right_left": i2s_channel_fmt_t.I2S_CHANNEL_FMT_RIGHT_LEFT,
+    "sterio": i2s_channel_fmt_t.I2S_CHANNEL_FMT_RIGHT_LEFT,
     # Load right channel data in both two channels
     "all_right": i2s_channel_fmt_t.I2S_CHANNEL_FMT_ALL_RIGHT,
     # Load left channel data in both two channels
@@ -40,6 +41,7 @@ CHANNEL_FORMAT = {
 
 i2s_bits_per_sample_t = cg.global_ns.enum("i2s_bits_per_sample_t")
 BITS_PER_SAMPLE = {
+    8: i2s_bits_per_sample_t.I2S_BITS_PER_SAMPLE_8BIT,
     16: i2s_bits_per_sample_t.I2S_BITS_PER_SAMPLE_16BIT,
     24: i2s_bits_per_sample_t.I2S_BITS_PER_SAMPLE_24BIT,
     32: i2s_bits_per_sample_t.I2S_BITS_PER_SAMPLE_32BIT,

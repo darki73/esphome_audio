@@ -317,6 +317,11 @@ int PCMSource::stream_write(char *buffer, int len) {
   return ret;
 }
 
+size_t PCMSource::available_space() const {
+  ringbuf_handle_t rb = audio_element_get_output_ringbuf(adf_raw_stream_writer_);
+  return rb_bytes_available(rb);
+}
+
 bool PCMSource::has_buffered_data() const {
   ringbuf_handle_t rb = audio_element_get_output_ringbuf(adf_raw_stream_writer_);
   return rb_bytes_filled(rb) > 0;

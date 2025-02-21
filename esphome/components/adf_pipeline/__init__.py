@@ -3,7 +3,6 @@
 import os
 
 import esphome.codegen as cg
-from esphome.components.esp32 import add_idf_component
 from esphome.components import esp32
 import esphome.config_validation as cv
 from esphome.const import CONF_ID
@@ -108,8 +107,8 @@ async def to_code(config):
         "https://github.com/espressif/esp-adf/raw/v2.5/idf_patches/idf_v4.4_freertos.patch",
     )
 
-    add_idf_component(
-        name="mdns",
+    esp32.add_idf_component((
+        name="esp-adf",
         repo="https://github.com/espressif/esp-adf.git",
         ref="v2.5",
         path="components",
