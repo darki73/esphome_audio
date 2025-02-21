@@ -107,7 +107,7 @@ async def to_code(config):
         "https://github.com/espressif/esp-adf/raw/v2.5/idf_patches/idf_v4.4_freertos.patch",
     )
 
-    esp32.add_idf_component((
+    esp32.add_idf_component(
         name="esp-adf",
         repo="https://github.com/espressif/esp-adf.git",
         ref="v2.5",
