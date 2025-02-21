@@ -79,7 +79,7 @@ class PCMSource : public ADFPipelineSourceElement {
   const std::string get_name() override { return "PCMSource"; }
   int stream_write(char *buffer, int len);
   bool has_buffered_data() const;
-  size_t available_space() conat;
+  size_t available_space() const;
   bool elements_have_stopped() override { return true; }
 
  protected:
